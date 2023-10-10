@@ -11,9 +11,9 @@ if __name__ == "__main__":
     def format_y_as_percentage(value, tick_number):
         return formatter.convert_to_percentage(value, 0)
 
-    probCalculator = ProbabilityCalculator(0.05)
-    targetProbabilities = [i/100 for i in range(1, 100)]
-    trialsNeeded = [probCalculator.calculate_trials_needed(p) / 6 * 250 for p in targetProbabilities]   
+    probCalculator = ProbabilityCalculator(0.05) # 5%
+    targetProbabilities = [i/100 for i in range(1, 100)] # calculate the target probabilty of 0% to 100%
+    trialsNeeded = [probCalculator.calculate_trials_needed(p) / 6 * 250 for p in targetProbabilities] # Divide by 6 as each loot box has 6 items then multiple by 250 as each box costs 250 gems
 
     chart = LineChart(title="Eatventure Ultimate", x_label="Gems Needed", y_label="Target Probability")
     chart.add_data(trialsNeeded, targetProbabilities)   
