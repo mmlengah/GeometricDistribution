@@ -1,56 +1,33 @@
-# Import necessary classes from modules
 from NumberFormatter import NumberFormatter
 from LineChart import LineChart
 from ProbabilityCalculator import ProbabilityCalculator
 
-def main():
-    # Create a NumberFormatter object to format numbers
+def generate_chart(success_probability, start_percentage, end_percentage, title, x_label, y_label, file_name, custom_calculation=lambda p: p):
+    # Data validation
+    if not 1 <= start_percentage < end_percentage:
+        raise ValueError("start_percentage must be between 1 and less than end_percentage")
+
+    if not start_percentage + 1 <= end_percentage <= 100:
+        raise ValueError("end_percentage must be greater than start_percentage and less than or equal to 100")
+
     formatter = NumberFormatter()
+    probCalculator = ProbabilityCalculator(success_probability / 100)
+    targetProbabilities = [i / 100 for i in range(start_percentage, end_percentage + 1)]
 
-    # Define a custom formatter function for the X-axis of the chart
-    def format_x_as_comma(value, tick_number):
-        """
-        Format X-axis tick labels with commas.
+    # Apply custom calculation
+    trialsNeeded = [custom_calculation(probCalculator.calculate_trials_needed(p)) for p in targetProbabilities]
 
-        :param value: Tick value to format.
-        :param tick_number: Tick number.
-        :return: Formatted label as a string.
-        """
-        return formatter.add_comma(value)
-
-    # Define a custom formatter function for the Y-axis of the chart
-    def format_y_as_percentage(value, tick_number):
-        """
-        Format Y-axis tick labels as percentages.
-
-        :param value: Tick value to format.
-        :param tick_number: Tick number.
-        :return: Formatted label as a string.
-        """
-        return formatter.convert_to_percentage(value, 0)
-
-    # Create a ProbabilityCalculator object with a success probability of 5%
-    probCalculator = ProbabilityCalculator(5 / 100)
-
-    # Calculate target probabilities from 1% to 99%
-    targetProbabilities = [i / 100 for i in range(1, 100)]
-
-    # Calculate the number of trials needed for each target probability
-    # and convert it to the number of gems needed (based on a loot box with 6 items and a cost of 250 gems each)
-    trialsNeeded = [probCalculator.calculate_trials_needed(p) / 6 * 250 for p in targetProbabilities]
-
-    # Create a LineChart object for visualizing the data
-    chart = LineChart(title="Eatventure Ultimate", x_label="Gems Needed", y_label="Target Probability")
-    
-    # Add the data points to the chart
+    chart = LineChart(title=title, x_label=x_label, y_label=y_label)
     chart.add_data(trialsNeeded, targetProbabilities)
+    chart.set_x_formatter(lambda v, t: formatter.add_comma(v))
+    chart.set_y_formatter(lambda v, t: formatter.convert_to_percentage(v, 0))
+    chart.save_chart(file_name, format='png')
 
-    # Set custom formatters for X and Y axes
-    chart.set_x_formatter(format_x_as_comma)
-    chart.set_y_formatter(format_y_as_percentage)
+def main_app():
+     # custom lambda to convert the trails needed to the number of gems needed (based on a loot box with 6 items and a cost of 250 gems each)
+    custom_lambda = lambda p: p / 6 * 250
 
-    # Save the chart as an image file
-    chart.save_chart("Eatventure_Ultimate_Probability_Chart.png", format='png')
+    generate_chart(5, 1, 99, "Eatventure Ultimate", "Gems Needed", "Target Probability", "Eatventure_Ultimate_Probability_Chart.png", custom_lambda)
 
 if __name__ == "__main__":
-    main()
+    main_app()
