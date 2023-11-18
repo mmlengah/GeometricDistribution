@@ -20,7 +20,7 @@ The NumberFormatter class is a Python utility for formatting numbers and convert
 
 The LineChart class is a Python utility for creating line charts using the matplotlib library. It provides methods for customizing the chart's title, labels, data, and formatters for the X and Y axes. You can also save the chart to a file in various formats.
 
-# Example.py:
+# Main.py:
 
 The example provided is related to the Eatventure mobile game. It is used to caculate how many gems (the premium currency within the game) are needed to aquired a ultimate item (the highest tier of items within the game as of making this). The example code produces the following graph:
 
