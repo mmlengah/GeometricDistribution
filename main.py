@@ -1,9 +1,9 @@
 # Import necessary classes from modules
 from NumberFormatter import NumberFormatter
 from LineChart import LineChart
-from ProbabilityCaculator import ProbabilityCalculator
+from ProbabilityCalculator import ProbabilityCalculator
 
-if __name__ == "__main__":
+def main():
     # Create a NumberFormatter object to format numbers
     formatter = NumberFormatter()
 
@@ -30,10 +30,10 @@ if __name__ == "__main__":
         return formatter.convert_to_percentage(value, 0)
 
     # Create a ProbabilityCalculator object with a success probability of 5%
-    probCalculator = ProbabilityCalculator(0.05)
+    probCalculator = ProbabilityCalculator(5 / 100)
 
     # Calculate target probabilities from 1% to 99%
-    targetProbabilities = [i/100 for i in range(1, 100)]
+    targetProbabilities = [i / 100 for i in range(1, 100)]
 
     # Calculate the number of trials needed for each target probability
     # and convert it to the number of gems needed (based on a loot box with 6 items and a cost of 250 gems each)
@@ -51,3 +51,6 @@ if __name__ == "__main__":
 
     # Save the chart as an image file
     chart.save_chart("Eatventure_Ultimate_Probability_Chart.png", format='png')
+
+if __name__ == "__main__":
+    main()
