@@ -1,40 +1,31 @@
+import math
+
 class ProbabilityCalculator:
     def __init__(self, success_probability):
-        """
-        Initialize a ProbabilityCalculator object with a given success probability.
-
-        :param success_probability: The probability of success for each trial.
-        """
+        if not 0 <= success_probability <= 1:
+            raise ValueError("Success probability must be between 0 and 1")
         self.success_probability = success_probability
 
     def calculate_trials_needed(self, target_probability):
-        """
-        Calculate the number of trials needed to achieve a target cumulative probability.
+        # Validate the target probability
+        if not 0 < target_probability <= 1:
+            raise ValueError("Target probability must be greater than 0 and less than or equal to 1")
+        # Handle edge cases where success is always guaranteed or impossible
+        if self.success_probability in [0, 1]:
+            return 1 if self.success_probability == 1 else float('inf')
 
-        :param target_probability: The target cumulative probability.
-        :return: The number of trials needed to reach or exceed the target probability.
-        """
-        p = self.success_probability  # Probability of success on each trial
-        k = 1  # Initialize the trial count
-        cumulative_probability = 0  # Initialize the cumulative probability
-
-        # Continue adding probabilities until the cumulative probability exceeds the target
-        while cumulative_probability < target_probability:
-            cumulative_probability += (1 - p) ** (k - 1) * p
-            k += 1  # Increment the trial count
-
-        return k  # Return the number of trials needed
+        # Use the formula to calculate the number of trials needed
+        return math.ceil(math.log(1 - target_probability) / math.log(1 - self.success_probability))
 
     def calculate_probability(self, number_of_trials):
-        """
-        Calculate the cumulative probability of success after a specified number of trials.
+        if number_of_trials < 0:
+            raise ValueError("Number of trials must be non-negative")
+        
+        # Handle edge cases where success is always guaranteed or impossible
+        if self.success_probability in [0, 1]:
+            return float(self.success_probability)
 
-        :param number_of_trials: The number of trials to consider.
-        :return: The cumulative probability of success after the given number of trials.
-        """
-        p = self.success_probability  # Probability of success on each trial
-
-        # Calculate the cumulative probability using the formula
-        cumulative_probability = 1 - (1 - p) ** number_of_trials
-
-        return cumulative_probability  # Return the cumulative probability
+        success_prob = self.success_probability
+        
+        # Calculate the probability of at least one success in the given number of trials
+        return 1 - (1 - success_prob) ** number_of_trials
