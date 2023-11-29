@@ -22,7 +22,7 @@ class ChartGenerator:
         # Calculate trials needed (or other value using custom calculation logic) for each target probability
         return [self.custom_calculation(self.prob_calculator.calculate_trials_needed(p)) for p in self.target_probabilities]
 
-    def generate_chart(self, title, x_label, y_label, file_name):
+    def generate_line_chart(self, title, x_label, y_label, file_name):
         trials_needed = self._calculate_trials()
         chart = LineChart(title=title, x_label=x_label, y_label=y_label)
         chart.add_data(trials_needed, self.target_probabilities)
@@ -31,10 +31,10 @@ class ChartGenerator:
         chart.save_chart(file_name, format='png')
 
 def main():
-    # custom calculation lambda function to convert the trails need to gems needed
+    # custom calculation lambda to change the trails need to a custom value
     custom_lambda = lambda p: p / 6 * 250
     chart_generator = ChartGenerator(5, 1, 100, custom_lambda)
-    chart_generator.generate_chart("Eatventure Ultimate", "Gems Needed", "Target Probability", "Eatventure_Ultimate_Probability_Chart.png")
+    chart_generator.generate_line_chart("Eatventure Ultimate", "Gems Needed", "Target Probability", "Eatventure_Ultimate_Probability_Chart.png")
 
 if __name__ == "__main__":
     main()
